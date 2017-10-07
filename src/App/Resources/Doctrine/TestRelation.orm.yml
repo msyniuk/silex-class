@@ -1,0 +1,16 @@
+App\Entities\TestRelation:
+    type: entity
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 50
+    oneToMany:
+        phonenumbers:
+          targetEntity: Test
+          mappedBy: phonenumbers
+          cascade: ["persist", "merge"]

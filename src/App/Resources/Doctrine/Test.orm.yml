@@ -1,0 +1,33 @@
+App\Entities\Test:
+    type: entity
+    table: test_test
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 50
+        email:
+            type: string
+            length: 32
+            column: user_email
+            unique: true
+            options:
+                fixed: true
+                comment: User's email address
+        loginCount:
+            type: integer
+            column: login_count
+            nullable: false
+            options:
+                unsigned: true
+                default: 0
+    manyToOne:
+        testRelation:
+          targetEntity: TestRelation
+          joinColumn:
+            name: testRelation_id
+            referencedColumnName: id
