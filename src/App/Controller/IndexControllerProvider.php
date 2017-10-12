@@ -8,6 +8,11 @@ use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\TestForm;
+use App\Form\TestRelationForm;
+use Symfony\Component\Form\Form;
+use App\Entities\Test;
+use App\Entities\TestRelation;
+use Doctrine\ORM\EntityManager;
 
 class IndexControllerProvider implements ControllerProviderInterface
 {
@@ -19,9 +24,62 @@ class IndexControllerProvider implements ControllerProviderInterface
     public function formAction(Request $request)
     {
         $form = new TestForm($this->app);
+
+        $builded_form = $form->buildForm();
+        $builded_form->handleRequest($request);
+        $is_submitted = $builded_form->isSubmitted();
+        $is_valid = $builded_form->isValid();
+        if ($is_valid) {
+            /* @var $em EntityManager*/
+            $em = $this->app['orm.em'];
+            $record = new Test();
+            $arr_form = $builded_form->getData();
+
+            $record->setName($arr_form['name']);
+            $record->setEmail($arr_form['email']);
+            $record->setLoginCount($arr_form['loginCount']);
+            $em->persist($record);
+            $em->flush();
+        }
+
+
+
         $twig_params = [
             'title' => 'Наша тестовая форма',
-            'form' => $form->buildForm()->createView(),
+            'form' => $builded_form->createView(),
+            'message' => 'Здесь будет форма'
+
+        ];
+        $response = $this->app['twig']->render('form.html.twig', $twig_params);
+        return Response::create($response, 200);
+    }
+
+    public function form2Action(Request $request)
+    {
+        $form = new TestRelationForm($this->app);
+
+        $builded_form = $form->buildForm();
+        $builded_form->handleRequest($request);
+        $is_submitted = $builded_form->isSubmitted();
+        $is_valid = $builded_form->isValid();
+        if ($is_valid) {
+            /* @var $em EntityManager*/
+            $em = $this->app['orm.em'];
+            $record = new TestRelation();
+            $arr_form = $builded_form->getData();
+
+            $record->setName($arr_form['name']);
+            $record->setEmail($arr_form['email']);
+            $record->setLoginCount($arr_form['loginCount']);
+            $em->persist($record);
+            $em->flush();
+        }
+
+
+
+        $twig_params = [
+            'title' => 'Наша тестовая форма',
+            'form' => $builded_form->createView(),
             'message' => 'Здесь будет форма'
 
         ];
@@ -61,6 +119,11 @@ class IndexControllerProvider implements ControllerProviderInterface
             ->value('id', 'index')
             ->value('trailing_slash', '')
             ->assert('trailing_slash', '/');
+
+        $controllers->match('form/add', function (Application $app) {
+            return Response::create('Add', 200);
+        });
+
         return $controllers;
     }
 
