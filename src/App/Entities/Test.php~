@@ -109,4 +109,33 @@ class Test
     {
         return $this->loginCount;
     }
+    /**
+     * @var \App\Entities\TestRelation
+     */
+    private $testRelation;
+
+
+    /**
+     * Set testRelation
+     *
+     * @param \App\Entities\TestRelation $testRelation
+     *
+     * @return Test
+     */
+    public function setTestRelation(\App\Entities\TestRelation $testRelation = null)
+    {
+        $this->testRelation = $testRelation;
+
+        return $this;
+    }
+
+    /**
+     * Get testRelation
+     *
+     * @return \App\Entities\TestRelation
+     */
+    public function getTestRelation()
+    {
+        return $this->testRelation;
+    }
 }

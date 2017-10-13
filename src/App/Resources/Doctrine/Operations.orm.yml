@@ -1,0 +1,28 @@
+App\Entities\Operations:
+    type: entity
+    table: operations
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        op_content:
+            type: string
+            length: 255
+        op_date:
+            type: date
+        op_sum:
+            type: float
+            column: op_sum
+            nullable: false
+            options:
+                unsigned: true
+                default: 0
+        op_sumusd:
+            type: float
+            column: op_sumusd
+            nullable: false
+            options:
+                unsigned: true
+                default: 0
